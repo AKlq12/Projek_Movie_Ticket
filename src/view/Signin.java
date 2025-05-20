@@ -51,7 +51,7 @@ public class Signin extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(56, 182, 255));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 22)); // NOI18N
-        jLabel2.setText("SIGN IN");
+        jLabel2.setText("SIGN UP");
 
         jLabel3.setText("Email");
 
@@ -79,7 +79,7 @@ public class Signin extends javax.swing.JFrame {
         });
 
         btnSignIn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnSignIn.setText("SIGN IN");
+        btnSignIn.setText("SIGN UP");
         btnSignIn.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnSignIn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
