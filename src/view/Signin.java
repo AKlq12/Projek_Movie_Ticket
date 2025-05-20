@@ -4,8 +4,13 @@
  */
 package view;
 
-public class Signin extends javax.swing.JFrame {
+import java.sql.*;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import javax.swing.Timer;
+import util.DatabaseConnection;
 
+public class Signin extends javax.swing.JFrame {
 
     public Signin() {
         initComponents();
@@ -157,16 +162,77 @@ public class Signin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnmasukakunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmasukakunActionPerformed
-        
+        new Login().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnmasukakunActionPerformed
 
     private void btnSignInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignInActionPerformed
-        
+        String email = jTextEmailSignIn.getText();
+        String username = jTextUsernameSignIn.getText();
+        String password = new String(jPasswordSignIn.getPassword());
+        String confirmPassword = new String(jPasswordConfirmSignin.getPassword());
+
+        if (email.isEmpty() || username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Semua field harus diisi", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (registerCustomer(email, username, password, confirmPassword)) {
+            JOptionPane.showMessageDialog(this, "Registrasi berhasil! Silakan login", "Success", JOptionPane.INFORMATION_MESSAGE);
+            Timer timer = new Timer(5000, e -> {
+                new Login().setVisible(true);
+                this.dispose();
+            });
+            timer.setRepeats(false);
+            timer.start();
+        }
+
+        if (!email.contains("@") || !email.contains(".")) {
+            JOptionPane.showMessageDialog(this, "Email tidak valid", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (password.length() < 6) {
+            JOptionPane.showMessageDialog(this, "Password minimal 6 karakter", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
     }//GEN-LAST:event_btnSignInActionPerformed
 
     private void jTextEmailSignInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextEmailSignInActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextEmailSignInActionPerformed
+
+    private boolean registerCustomer(String email, String username, String password, String confirmPassword) {
+        if (!password.equals(confirmPassword)) {
+            JOptionPane.showMessageDialog(this, "Password dan konfirmasi password tidak cocok", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        Connection connection = DatabaseConnection.getConnection();
+        String query = "INSERT INTO customer (email, username, password) VALUES (?, ?, SHA2(?, 256))";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, email);
+            statement.setString(2, username);
+            statement.setString(3, password);
+
+            int rowsAffected = statement.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            if (e.getMessage().contains("Duplicate entry")) {
+                JOptionPane.showMessageDialog(this, "Username atau email sudah digunakan", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                e.printStackTrace();
+            }
+            return false;
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     /**
      * @param args the command line arguments

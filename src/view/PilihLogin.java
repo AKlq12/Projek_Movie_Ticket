@@ -7,7 +7,6 @@ public class PilihLogin extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }
 
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -88,11 +87,17 @@ public class PilihLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnlogincustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnlogincustomerActionPerformed
-        
+        Login login = new Login();
+        login.setIsCustomer(true); // Anda perlu menambahkan method setter di kelas Login
+        login.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnlogincustomerActionPerformed
 
     private void btnloginadminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnloginadminActionPerformed
-        
+        Login login = new Login();
+        login.setIsCustomer(false); // Anda perlu menambahkan method setter di kelas Login
+        login.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnloginadminActionPerformed
 
     /**

@@ -4,8 +4,13 @@
  */
 package view;
 
-public class Login extends javax.swing.JFrame {
+import java.sql.*;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import javax.swing.Timer;
+import util.DatabaseConnection;
 
+public class Login extends javax.swing.JFrame {
 
     public Login() {
         initComponents();
@@ -143,8 +148,62 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_jLoginPasswordActionPerformed
 
     private void btnLoginMasukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginMasukActionPerformed
-        
+        String username = jTextUsernameLogin.getText();
+        String password = new String(jLoginPassword.getPassword());
+
+        if (username.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Username dan password tidak boleh kosong", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        boolean isAdmin = false; // Ini contoh, Anda perlu menyesuaikan
+
+        if (validateLogin(username, password, isAdmin)) {
+            if (isAdmin) {
+                new AdminDashboard().setVisible(true);
+            } else {
+                new CustomerDashboard().setVisible(true);
+            }
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Username atau password salah", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnLoginMasukActionPerformed
+
+    private boolean validateLogin(String username, String password, boolean isAdmin) {
+        Connection connection = DatabaseConnection.getConnection();
+        String query = isAdmin
+                ? "SELECT * FROM admin WHERE username = ? AND password = SHA2(?, 256)"
+                : "SELECT * FROM customer WHERE username = ? AND password = SHA2(?, 256)";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, username);
+            statement.setString(2, password);
+
+            ResultSet result = statement.executeQuery();
+            return result.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private boolean isCustomer = true;
+
+    public void setIsCustomer(boolean isCustomer) {
+        this.isCustomer = isCustomer;
+
+        // Anda juga bisa mengubah tampilan berdasarkan jenis login
+        if (!isCustomer) {
+            jLabel2.setText("LOGIN ADMIN");
+            // Atur ulang tampilan lainnya jika perlu
+        }
+    }
 
     /**
      * @param args the command line arguments
