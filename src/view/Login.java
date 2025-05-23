@@ -9,13 +9,19 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import javax.swing.Timer;
 import util.DatabaseConnection;
+import controller.AuthController;
+import javax.swing.JOptionPane;
+
 
 public class Login extends javax.swing.JFrame {
-
+    private AuthController authController;
+    
     public Login() {
         initComponents();
         setLocationRelativeTo(null);
+        authController = new AuthController();
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -155,11 +161,19 @@ public class Login extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Username dan password tidak boleh kosong", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        boolean isAdmin = false; // Ini contoh, Anda perlu menyesuaikan
 
-        if (validateLogin(username, password, isAdmin)) {
+        boolean isAdmin = false; // Anda bisa menambahkan radio button untuk memilih jenis login
+        
+        boolean authenticated;
+        if (isAdmin) {
+            authenticated = authController.authenticateAdmin(username, password);
+        } else {
+            authenticated = authController.authenticateCustomer(username, password);
+        }
+
+        if (authenticated) {
             if (isAdmin) {
-                new AdminDashboard().setVisible(true);
+                new AdminMainFrm().setVisible(true);
             } else {
                 new CustomerDashboard().setVisible(true);
             }
