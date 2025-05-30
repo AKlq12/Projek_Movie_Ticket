@@ -36,10 +36,30 @@ public class CustomerDashboard extends javax.swing.JFrame {
     }
 }
 
-
     public CustomerDashboard() {
         initComponents();
         loadData();
+        next.addActionListener(new java.awt.event.ActionListener() {
+    public void actionPerformed(java.awt.event.ActionEvent evt) {
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow != -1) {
+            String idMovie = jTable1.getValueAt(selectedRow, 0).toString();
+            String title = jTable1.getValueAt(selectedRow, 1).toString();
+            String genre = jTable1.getValueAt(selectedRow, 2).toString();
+            String rating = jTable1.getValueAt(selectedRow, 3).toString();
+            String time = jTable1.getValueAt(selectedRow, 4).toString();
+            String showtime = jTable1.getValueAt(selectedRow, 5).toString();
+
+            // Buat objek Seat dan oper data film
+            Seat seatFrame = new Seat(idMovie, title, genre, rating, time, showtime);
+            seatFrame.setVisible(true);
+            dispose(); // Tutup jendela saat ini jika ingin
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(null, "Pilih film terlebih dahulu.");
+        }
+    }
+});
+
         setLocationRelativeTo(null);
     }
 
@@ -101,7 +121,7 @@ public class CustomerDashboard extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29)
                 .addComponent(next)
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();
