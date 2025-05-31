@@ -10,23 +10,24 @@ import util.DatabaseConnection;
 public class CustomerDashboard extends javax.swing.JFrame {
     
     private void loadData() {
-    DefaultTableModel model = new DefaultTableModel(new String[]{"ID Movie", "Title", "Genre", "Rating", "Time", "Showtime"}, 0);
+    DefaultTableModel model = new DefaultTableModel(new String[]{"ID Movie", "Title", "Genre", "Rating", "Date",  "Duration", "Showtime"}, 0);
 
     try {
         Connection conn = DatabaseConnection.getConnection(); // Gunakan koneksi dari class util
         if (conn != null) {
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT id_movie, movie_title, genre, rating, time, showtime FROM movies");
+            ResultSet rs = stmt.executeQuery("SELECT id_movie, movie_title, genre, rating, date, time, showtime FROM movies");
 
             while (rs.next()) {
                 String id = rs.getString("id_movie");
                 String title = rs.getString("movie_title");
                 String genre = rs.getString("genre");
                 String rating = rs.getString("rating");
+                String date = rs.getString("date");
                 String time = rs.getString("time");
                 String showtime = rs.getString("showtime");
 
-                model.addRow(new Object[]{id, title, genre, rating, time, showtime});
+                model.addRow(new Object[]{id, title, genre, rating, date, time, showtime});
             }
 
             jTable1.setModel(model);
@@ -76,13 +77,13 @@ public class CustomerDashboard extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID Movie", "Title", "Genre", "Rating", "Time", "Showtime"
+                "ID Movie", "Title", "Genre", "Rating", "Date", "Duration", "Showtime"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
