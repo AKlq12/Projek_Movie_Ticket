@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 30, 2025 at 07:29 AM
+-- Generation Time: May 31, 2025 at 03:12 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -59,8 +59,6 @@ CREATE TABLE `bookings` (
   `id_movie` int(11) NOT NULL,
   `movie_title` varchar(100) NOT NULL,
   `genre` varchar(255) NOT NULL,
-  `rating` decimal(3,1) NOT NULL,
-  `time` time NOT NULL,
   `seat` varchar(255) NOT NULL,
   `purchased_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `total_amount` int(11) NOT NULL,
@@ -104,6 +102,7 @@ CREATE TABLE `movies` (
   `movie_title` varchar(100) NOT NULL,
   `genre` varchar(255) NOT NULL,
   `rating` decimal(3,1) DEFAULT NULL,
+  `date` date DEFAULT NULL,
   `time` time NOT NULL,
   `showtime` time NOT NULL,
   `content_rating` varchar(10) NOT NULL,
@@ -120,8 +119,9 @@ CREATE TABLE `movies` (
 -- Dumping data for table `movies`
 --
 
-INSERT INTO `movies` (`id_movie`, `movie_title`, `genre`, `rating`, `time`, `showtime`, `content_rating`, `description`, `screen`, `ticket_price`, `uri`, `poster`, `created_at`, `updated_at`) VALUES
-(1, 'Avengers: Endgame', 'Action/Sci-Fi', 5.0, '03:01:50', '16:45:00', '5', 'After Thanos, an intergalactic warlord, disintegrates half of the universe, the Avengers must reunite and assemble again to reinvigorate their trounced allies and restore balance.', 'Studio 2', 40000, NULL, NULL, '2025-05-30 04:10:01', '2025-05-30 04:13:59');
+INSERT INTO `movies` (`id_movie`, `movie_title`, `genre`, `rating`, `date`, `time`, `showtime`, `content_rating`, `description`, `screen`, `ticket_price`, `uri`, `poster`, `created_at`, `updated_at`) VALUES
+(1, 'Avengers: Endgame', 'Action/Sci-Fi', 5.0, '2025-06-22', '03:01:50', '16:45:00', '5', 'After Thanos, an intergalactic warlord, disintegrates half of the universe, the Avengers must reunite and assemble again to reinvigorate their trounced allies and restore balance.', 'Studio 2', 40000, NULL, NULL, '2025-05-30 04:10:01', '2025-05-31 00:03:13'),
+(3, 'The Amazing Spider-Man 3', 'Action', 5.0, '2025-06-28', '02:58:40', '14:45:50', '5', 'Peter Parker, an outcast high school student, gets bitten by a radioactive spider and attains superpowers. While unravelling his parents\' disappearance, he must fight against the Lizard.', 'Studio 3', 40000, NULL, NULL, '2025-05-31 00:08:48', '2025-05-31 00:08:48');
 
 -- --------------------------------------------------------
 
@@ -202,7 +202,7 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `movies`
 --
 ALTER TABLE `movies`
-  MODIFY `id_movie` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_movie` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `screens`
