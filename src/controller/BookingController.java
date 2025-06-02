@@ -1,6 +1,7 @@
 package controller;
 
 import dao.BookingDAO;
+import java.security.Timestamp;
 import model.Booking;
 import java.sql.Date;
 import java.util.List;
@@ -13,10 +14,10 @@ public class BookingController {
     }
 
     public boolean createBooking(int userId, int movieId, String seat, int noOfTickets, 
-                               Date purchasedDate, Date bookedDate, int totalAmount) {
+                               Timestamp purchasedDate, Date bookedDate, int totalAmount) {
         Booking booking = new Booking();
-        booking.setUserId(userId);
-        booking.setBookedMovieId(movieId);
+        booking.setCustomerId(userId);
+        booking.setMovieId(movieId);
         booking.setSeat(seat);
         booking.setNoOfTickets(noOfTickets);
         booking.setPurchasedDate(purchasedDate);

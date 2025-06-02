@@ -12,15 +12,14 @@ public class MovieController {
         this.movieDAO = new MovieDAO();
     }
 
-    public boolean addMovie(String title, String genre, double rating, int hour, int minute, 
+    public boolean addMovie(String title, String genre, double rating, int time, int minute, 
                           String contentRating, String description, String screen, 
                           int ticketPrice, String uri, Blob poster) {
         Movie movie = new Movie();
-        movie.setMovieTitle(title);
+        movie.setTitle(title);
         movie.setGenre(genre);
         movie.setRating(rating);
-        movie.setHour(hour);
-        movie.setMinute(minute);
+        movie.setTime(time);
         movie.setContentRating(contentRating);
         movie.setDescription(description);
         movie.setScreen(screen);
