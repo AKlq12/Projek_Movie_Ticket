@@ -43,6 +43,28 @@ public class BookingDAO {
         }
         return bookings;
     }
+    
+    public boolean createBooking(Booking booking) {
+    String query = "INSERT INTO bookings (id_booking, id_customer, id_movie, movie_title, genre, seat, purchased_date, total_amount, created_at) " +
+                   "VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+    try (PreparedStatement ps = connection.prepareStatement(query)) {
+        ps.setInt(1, booking.getId());
+        ps.setInt(2, booking.getCustomerId());
+        ps.setInt(3, booking.getMovieId());
+        ps.setString(4, booking.getMovieTitle());
+        ps.setString(5, booking.getGenre());
+        ps.setString(6, booking.getSeat());
+        ps.setTimestamp(7, booking.getPurchasedDate());
+        ps.setInt(8, booking.getTotalAmount());
+
+        int rowsAffected = ps.executeUpdate();
+        return rowsAffected > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+
 
     // Search bookings by movie title or customer ID
     public List<Booking> searchBookings(String searchTerm) {

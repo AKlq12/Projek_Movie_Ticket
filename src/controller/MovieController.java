@@ -12,40 +12,41 @@ public class MovieController {
         this.movieDAO = new MovieDAO();
     }
 
-    public boolean addMovie(String title, String genre, double rating, int time, int minute, 
-                          String contentRating, String description, String screen, 
-                          int ticketPrice, String uri, Blob poster) {
+    public boolean addMovie(String title, String genre, double rating, String date, String time, String showtime,
+                            String contentRating, String description, String screen, 
+                            int ticketPrice, String uri, Blob poster) {
         Movie movie = new Movie();
         movie.setTitle(title);
         movie.setGenre(genre);
         movie.setRating(rating);
+        movie.setDate(date);
         movie.setTime(time);
+        movie.setShowtime(showtime);
         movie.setContentRating(contentRating);
         movie.setDescription(description);
         movie.setScreen(screen);
         movie.setTicketPrice(ticketPrice);
         movie.setUri(uri);
-        movie.setPoster(poster);
         
         return movieDAO.addMovie(movie);
     }
 
-    public boolean updateMovie(int id, String title, String genre, double rating, int hour, 
-                             int minute, String contentRating, String description, 
+    public boolean updateMovie(int id, String title, String genre, double rating, String date, String time, String showtime
+                            , String contentRating, String description, 
                              String screen, int ticketPrice, String uri, Blob poster) {
         Movie movie = new Movie();
         movie.setId(id);
-        movie.setMovieTitle(title);
+        movie.setTitle(title);
         movie.setGenre(genre);
         movie.setRating(rating);
-        movie.setHour(hour);
-        movie.setMinute(minute);
+        movie.setDate(date);
+        movie.setTime(time);
+        movie.setShowtime(showtime);
         movie.setContentRating(contentRating);
         movie.setDescription(description);
         movie.setScreen(screen);
         movie.setTicketPrice(ticketPrice);
         movie.setUri(uri);
-        movie.setPoster(poster);
         
         return movieDAO.updateMovie(movie);
     }
