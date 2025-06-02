@@ -88,14 +88,14 @@ public class PilihLogin extends javax.swing.JFrame {
 
     private void btnlogincustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnlogincustomerActionPerformed
         Login login = new Login();
-        login.setIsCustomer(true); // Anda perlu menambahkan method setter di kelas Login
+        login.setUserType("customer"); // Set user type to customer
         login.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnlogincustomerActionPerformed
 
     private void btnloginadminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnloginadminActionPerformed
         Login login = new Login();
-        login.setIsCustomer(false); // Anda perlu menambahkan method setter di kelas Login
+        login.setUserType("admin"); // Set user type to admin
         login.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnloginadminActionPerformed

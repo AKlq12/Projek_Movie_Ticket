@@ -8,16 +8,28 @@ import util.DatabaseConnection;
 import controller.AuthController;
 import javax.swing.JOptionPane;
 
-
 public class Login extends javax.swing.JFrame {
+
     private AuthController authController;
-    
+    private String userType;
+
     public Login() {
         initComponents();
         setLocationRelativeTo(null);
         authController = new AuthController();
     }
-    
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+        if ("admin".equals(userType)) {
+            jLabel2.setText("LOGIN ADMIN");
+            btnbuatakun.setVisible(false); // Hide create account for admin
+            jLabel5.setVisible(false);
+        } else {
+            jLabel2.setText("LOGIN CUSTOMER");
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -135,7 +147,9 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnbuatakunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuatakunActionPerformed
-        new Signin().setVisible(true);
+        Signin signin = new Signin();
+        signin.setUserType("customer"); // Default to customer if coming from login screen
+        signin.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnbuatakunActionPerformed
 
@@ -152,17 +166,15 @@ public class Login extends javax.swing.JFrame {
             return;
         }
 
-        boolean isAdmin = true; 
-        
         boolean authenticated;
-        if (isAdmin) {
+        if ("admin".equals(userType)) {
             authenticated = authController.authenticateAdmin(username, password);
         } else {
             authenticated = authController.authenticateCustomer(username, password);
         }
 
         if (authenticated) {
-            if (isAdmin) {
+            if ("admin".equals(userType)) {
                 new AdminDashboard().setVisible(true);
             } else {
                 new CustomerDashboard().setVisible(true);

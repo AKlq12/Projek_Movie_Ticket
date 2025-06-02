@@ -8,10 +8,22 @@ import util.DatabaseConnection;
 
 public class Signin extends javax.swing.JFrame {
 
+    private String userType;
+
     public Signin() {
         initComponents();
         setLocationRelativeTo(null);
     }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+        if ("admin".equals(userType)) {
+            jLabel2.setText("ADMIN SIGN UP");
+        } else {
+            jLabel2.setText("CUSTOMER SIGN UP");
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -167,16 +179,6 @@ public class Signin extends javax.swing.JFrame {
             return;
         }
 
-        if (registerCustomer(email, username, password, confirmPassword)) {
-            JOptionPane.showMessageDialog(this, "Registrasi berhasil! Silakan login", "Success", JOptionPane.INFORMATION_MESSAGE);
-            Timer timer = new Timer(5000, e -> {
-                new Login().setVisible(true);
-                this.dispose();
-            });
-            timer.setRepeats(false);
-            timer.start();
-        }
-
         if (!email.contains("@") || !email.contains(".")) {
             JOptionPane.showMessageDialog(this, "Email tidak valid", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -186,18 +188,59 @@ public class Signin extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Password minimal 6 karakter", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
+
+        if (!password.equals(confirmPassword)) {
+            JOptionPane.showMessageDialog(this, "Password dan konfirmasi password tidak cocok", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        boolean registered;
+        if ("admin".equals(userType)) {
+            registered = registerAdmin(email, username, password);
+        } else {
+            registered = registerCustomer(email, username, password);
+        }
+
+        if (registered) {
+            JOptionPane.showMessageDialog(this, "Registrasi berhasil! Silakan login", "Success", JOptionPane.INFORMATION_MESSAGE);
+            new Login().setVisible(true);
+            this.dispose();
+        }
     }//GEN-LAST:event_btnSignInActionPerformed
 
     private void jTextEmailSignInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextEmailSignInActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextEmailSignInActionPerformed
 
-    private boolean registerCustomer(String email, String username, String password, String confirmPassword) {
-        if (!password.equals(confirmPassword)) {
-            JOptionPane.showMessageDialog(this, "Password dan konfirmasi password tidak cocok", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
+    private boolean registerAdmin(String email, String username, String password) {
+        Connection connection = DatabaseConnection.getConnection();
+        String query = "INSERT INTO admin (email, username, password) VALUES (?, ?, SHA2(?, 256))";
 
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, email);
+            statement.setString(2, username);
+            statement.setString(3, password);
+
+            int rowsAffected = statement.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            if (e.getMessage().contains("Duplicate entry")) {
+                JOptionPane.showMessageDialog(this, "Username atau email sudah digunakan", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                e.printStackTrace();
+            }
+            return false;
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private boolean registerCustomer(String email, String username, String password) {
+        // Existing customer registration code
         Connection connection = DatabaseConnection.getConnection();
         String query = "INSERT INTO customer (email, username, password) VALUES (?, ?, SHA2(?, 256))";
 

@@ -8,38 +8,46 @@ import util.DatabaseConnection;
 
 public class AuthController {
     public boolean authenticateAdmin(String username, String password) {
+        Connection connection = DatabaseConnection.getConnection();
         String query = "SELECT * FROM admin WHERE username = ? AND password = SHA2(?, 256)";
         
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pst = conn.prepareStatement(query)) {
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, username);
+            statement.setString(2, password);
             
-            pst.setString(1, username);
-            pst.setString(2, password);
-            
-            try (ResultSet rs = pst.executeQuery()) {
-                return rs.next();
-            }
+            ResultSet result = statement.executeQuery();
+            return result.next();
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
-
+    
     public boolean authenticateCustomer(String username, String password) {
+        Connection connection = DatabaseConnection.getConnection();
         String query = "SELECT * FROM customer WHERE username = ? AND password = SHA2(?, 256)";
         
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pst = conn.prepareStatement(query)) {
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, username);
+            statement.setString(2, password);
             
-            pst.setString(1, username);
-            pst.setString(2, password);
-            
-            try (ResultSet rs = pst.executeQuery()) {
-                return rs.next();
-            }
+            ResultSet result = statement.executeQuery();
+            return result.next();
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
