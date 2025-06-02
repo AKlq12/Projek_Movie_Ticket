@@ -3,8 +3,8 @@ package dao;
 import model.Invoice;
 import util.DatabaseConnection;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class InvoiceDAO {
     private Connection connection;
@@ -14,22 +14,27 @@ public class InvoiceDAO {
     }
 
     public Invoice getInvoiceData(int userId, int bookedId) {
-        String query = "SELECT bookings.seat, bookings.no_of_tickets, bookings.booked_date, " +
-                      "bookings.showtime, bookings.total_amount, booked_movie.movie_title, " +
-                      "booked_movie.screen FROM bookings INNER JOIN booked_movie ON " +
-                      "bookings.booked_movie_id=booked_movie.id WHERE bookings.userid = ? " +
-                      "AND bookings.booked_movie_id = ?";
-        
+        String query = "SELECT b.seat, b.total_amount, b.purchased_date, " +
+                      "m.showtime, m.movie_title, m.screen " +
+                      "FROM bookings b " +
+                      "INNER JOIN movies m ON b.id_movie = m.id_movie " +
+                      "WHERE b.id_customer = ? AND b.id_booking = ?";
+
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setInt(1, userId);
             pst.setInt(2, bookedId);
-            
+
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
+                    String seats = rs.getString("seat");
+                    int noOfTickets = seats.split(",").length; // Calculate tickets from seats
+                    
                     return new Invoice(
-                        rs.getString("seat"),
-                        rs.getInt("no_of_tickets"),
-                        rs.getDate("booked_date"),
+                        userId,
+                        bookedId,
+                        seats,
+                        noOfTickets,
+                        rs.getDate("purchased_date"),
                         rs.getString("showtime"),
                         rs.getInt("total_amount"),
                         rs.getString("movie_title"),
@@ -38,7 +43,7 @@ public class InvoiceDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.getLogger(InvoiceDAO.class.getName()).log(Level.SEVERE, "Error getting invoice data", e);
         }
         return null;
     }

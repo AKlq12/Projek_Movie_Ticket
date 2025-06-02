@@ -1,6 +1,6 @@
 package view;
 
-import controller.UpdateMovieController;
+import controller.CreateMovieController;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.io.ByteArrayOutputStream;
@@ -37,16 +37,18 @@ import util.DatabaseConnection;
  *
  * @author nadinCodeHat
  */
-public class UpdateMovieFrm extends javax.swing.JFrame {
+public class CreateMovieFrm extends javax.swing.JFrame {
 
-    public UpdateMovieFrm() {
+    public CreateMovieFrm() {
+        initComponents();  // Add this line
+        loadFrameImage();
     }
 
     int id;
 
-    public UpdateMovieFrm(int movieId) {
+    public CreateMovieFrm(int id) {
         initComponents();
-        this.id = movieId;
+        this.id = id;
         loadEditData();
         loadFrameImage();
     }
@@ -55,7 +57,7 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
         try {
             setIconImage(ImageIO.read(new File("logo.png")));
         } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(UpdateMovieFrm.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CreateMovieFrm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -100,7 +102,7 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
         screenCombo = new javax.swing.JComboBox<>();
         posterImgPath = new javax.swing.JTextField();
         browsePosterBtn = new javax.swing.JButton();
-        updateBtn = new javax.swing.JButton();
+        createBtn = new javax.swing.JButton();
         uriTextField = new javax.swing.JTextField();
         uriLabel = new javax.swing.JLabel();
 
@@ -114,7 +116,7 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
 
         editLabel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         editLabel.setForeground(new java.awt.Color(51, 102, 255));
-        editLabel.setText("Edit movie");
+        editLabel.setText("Create movie");
         mainPanel.add(editLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, -1, -1));
 
         movieTitleLabel.setText("Movie Title");
@@ -431,22 +433,22 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
         });
         mainPanel.add(browsePosterBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 520, -1, -1));
 
-        updateBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/updateBtn.png"))); // NOI18N
-        updateBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        updateBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+        createBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/createBtn.png"))); // NOI18N
+        createBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        createBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                updateBtnMouseEntered(evt);
+                createBtnMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                updateBtnMouseExited(evt);
+                createBtnMouseExited(evt);
             }
         });
-        updateBtn.addActionListener(new java.awt.event.ActionListener() {
+        createBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                updateBtnActionPerformed(evt);
+                createBtnActionPerformed(evt);
             }
         });
-        mainPanel.add(updateBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 610, 80, 30));
+        mainPanel.add(createBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 610, 80, 30));
         mainPanel.add(uriTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 560, 270, -1));
 
         uriLabel.setText("Youtube URI:");
@@ -462,7 +464,7 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
 
     public void loadEditData() {
         //Retrieve data
-        String query = "SELECT movie_title, genre, rating, date, time, showtime, content_rating, description, screen, ticket_price, uri, poster FROM `movies` WHERE id_movie= '" + id + "'";
+        String query = "SELECT movie_title, genre, rating, hour, minute, content_rating, description, screen, ticket_price, uri, poster FROM `movies` WHERE id = '" + id + "'";
         String movietitle = null;
         String genre = null;
         Double rating = 0.0;
@@ -482,6 +484,8 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
                 movietitle = rs.getString("movie_title");
                 genre = rs.getString("genre");
                 rating = rs.getDouble("rating");
+                hour = rs.getInt("hour");
+                minute = rs.getInt("minute");
                 contentRating = rs.getString("content_rating");
                 description = rs.getString("description");
                 screen = rs.getString("screen");
@@ -493,7 +497,7 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
             rs.close();
             DatabaseConnection.getConnection().close();
         } catch (SQLException ex) {
-            Logger.getLogger(UpdateMovieFrm.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CreateMovieFrm.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         movieTitleTextField.setText(movietitle);
@@ -641,7 +645,7 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
         }
     }
 
-    private void updateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBtnActionPerformed
+    private void createBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createBtnActionPerformed
         checkAdventureCheckBox();
         checkActionCheckBox();
         checkMysteryCheckBox();
@@ -653,8 +657,9 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
         checkFantasyCheckBox();
         checkDramaCheckBox();
 
+        // Collecting form data
         String movie_title = movieTitleTextField.getText();
-        String genre = str;
+        String genre = "";  // Initialize genre as an empty string
         Double rating = (Double) ratingSpinner.getValue();
         Integer hour = (Integer) hourSpinner.getValue();
         Integer minute = (Integer) minuteSpinner.getValue();
@@ -664,15 +669,52 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
         Integer ticketPrice = Integer.parseInt(tckPrcTextField.getText());
         String uri = uriTextField.getText();
         PreparedStatement pst = null;
+
+        StringBuilder genreBuilder = new StringBuilder();
+
+        if (adventureCheckBox.isSelected()) {
+            genreBuilder.append("Adventure, ");
+        }
+        if (actionCheckBox.isSelected()) {
+            genreBuilder.append("Action, ");
+        }
+        if (mysteryCheckBox.isSelected()) {
+            genreBuilder.append("Mystery, ");
+        }
+        if (animationCheckBox.isSelected()) {
+            genreBuilder.append("Animation, ");
+        }
+        if (crimeCheckBox.isSelected()) {
+            genreBuilder.append("Crime, ");
+        }
+        if (comedyCheckBox.isSelected()) {
+            genreBuilder.append("Comedy, ");
+        }
+        if (horrorCheckBox.isSelected()) {
+            genreBuilder.append("Horror, ");
+        }
+        if (thrillerCheckBox.isSelected()) {
+            genreBuilder.append("Thriller, ");
+        }
+        if (fantasyCheckBox.isSelected()) {
+            genreBuilder.append("Fantasy, ");
+        }
+        if (dramaCheckBox.isSelected()) {
+            genreBuilder.append("Drama, ");
+        }
+
+        // Remove the trailing comma and space
+        if (genreBuilder.length() > 0) {
+            genre = genreBuilder.substring(0, genreBuilder.length() - 2); // Remove last ", "
+        }
+
         if (checkEmptyFields()) {
-            String updateMoveQuery = null;
-            if (posterBytes != null && poster == null) {
-                updateMoveQuery = "UPDATE `movies` SET `movie_title` = ?, `genre` = ?, `rating` = ?, `hour` = ?, `minute` = ?, `content_rating` = ?, `description` = ?, `screen` = ?, `ticket_price` = ?, `uir` = ? WHERE id= '" + id + "'";
-            } else {
-                updateMoveQuery = "UPDATE `movies` SET `movie_title` = ?, `genre` = ?, `rating` = ?, `hour` = ?, `minute` = ?, `content_rating` = ?, `description` = ?, `screen` = ?, `ticket_price` = ?, `uir` = ?, `poster` = ? WHERE id= '" + id + "'";
-            }
+            // Insert new movie into the database
+            String insertMovieQuery = "INSERT INTO movies (movie_title, genre, rating, hour, minute, content_rating, description, screen, ticket_price, uri, poster) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
             try {
-                pst = DatabaseConnection.getConnection().prepareStatement(updateMoveQuery);
+                pst = DatabaseConnection.getConnection().prepareStatement(insertMovieQuery);
                 pst.setString(1, movie_title);
                 pst.setString(2, genre);
                 pst.setDouble(3, rating);
@@ -686,16 +728,24 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
                 if (posterBytes != null && poster != null) {
                     pst.setBytes(11, poster);
                 }
+
                 pst.executeUpdate();
                 pst.close();
                 DatabaseConnection.getConnection().close();
+
+                // Show success message
+                JOptionPane.showMessageDialog(null, "Movie created successfully!");
+
+                // Return to AdminMainFrm
+                this.setVisible(false);  // Hide current form
+                AdminDashboard adminMainFrm = new AdminDashboard();
+                adminMainFrm.setVisible(true);  // Show AdminMainFrm
+
             } catch (SQLException ex) {
-                Logger.getLogger(UpdateMovieFrm.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-                JOptionPane.showMessageDialog(null, "Movie updated successfully!");
+                Logger.getLogger(CreateMovieFrm.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }//GEN-LAST:event_updateBtnActionPerformed
+    }//GEN-LAST:event_createBtnActionPerformed
 
     private boolean checkEmptyFields() {
         String movie_title = movieTitleTextField.getText();
@@ -703,7 +753,7 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
         String ticketPrice = tckPrcTextField.getText();
         String uri = uriTextField.getText();
 
-        //check empty fields
+        // Check for empty fields
         if (movie_title.trim().equals("")) {
             JOptionPane.showMessageDialog(null, "Please enter a movie title.", "Empty Field", 2);
             return false;
@@ -723,28 +773,27 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
         if (uri.trim().equals("")) {
             JOptionPane.showMessageDialog(null, "Please enter the youtube uri.", "Empty Field", 2);
             return false;
-        } else {
-            return true;
         }
+        return true;
     }
 
-    private void updateBtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_updateBtnMouseEntered
+    private void createBtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_createBtnMouseEntered
         try {
             Image updateBtnImgHover = ImageIO.read(getClass().getResource("/movie/ticketbooking/system/assets/components/updateBtnHover.png"));
-            updateBtn.setIcon(new ImageIcon(updateBtnImgHover));
+            createBtn.setIcon(new ImageIcon(updateBtnImgHover));
         } catch (IOException ex) {
-            Logger.getLogger(UpdateMovieFrm.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CreateMovieFrm.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_updateBtnMouseEntered
+    }//GEN-LAST:event_createBtnMouseEntered
 
-    private void updateBtnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_updateBtnMouseExited
+    private void createBtnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_createBtnMouseExited
         try {
             Image updateBtnImg = ImageIO.read(getClass().getResource("/movie/ticketbooking/system/assets/components/updateBtn.png"));
-            updateBtn.setIcon(new ImageIcon(updateBtnImg));
+            createBtn.setIcon(new ImageIcon(updateBtnImg));
         } catch (IOException ex) {
-            Logger.getLogger(UpdateMovieFrm.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CreateMovieFrm.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_updateBtnMouseExited
+    }//GEN-LAST:event_createBtnMouseExited
 
     byte[] poster = null;
     private void browsePosterBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browsePosterBtnActionPerformed
@@ -834,37 +883,9 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(UpdateMovieFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            UpdateMovieFrm view = new UpdateMovieFrm();
-            new UpdateMovieController(view, null); // Perhatikan ini adalah UpdateMovieController
+            CreateMovieFrm view = new CreateMovieFrm();
+            new CreateMovieController(view, null);
             view.setVisible(true);
         });
     }
@@ -878,6 +899,7 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
     private javax.swing.JCheckBox comedyCheckBox;
     private javax.swing.JComboBox<String> contRatingCombo;
     private javax.swing.JLabel contentRatingLabel;
+    private javax.swing.JButton createBtn;
     private javax.swing.JCheckBox crimeCheckBox;
     private javax.swing.JPanel descriptionPanel;
     private javax.swing.JTextArea descriptionTextArea;
@@ -907,7 +929,6 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
     private javax.swing.JLabel theaterLabel;
     private javax.swing.JCheckBox thrillerCheckBox;
     private javax.swing.JPanel ticketPricesPanel;
-    private javax.swing.JButton updateBtn;
     private javax.swing.JLabel uriLabel;
     private javax.swing.JTextField uriTextField;
     // End of variables declaration//GEN-END:variables
@@ -1014,6 +1035,14 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
 
     public void setContentRatingLabel(JLabel contentRatingLabel) {
         this.contentRatingLabel = contentRatingLabel;
+    }
+
+    public JButton getCreateBtn() {
+        return createBtn;
+    }
+
+    public void setCreateBtn(JButton createBtn) {
+        this.createBtn = createBtn;
     }
 
     public JCheckBox getCrimeCheckBox() {
@@ -1246,14 +1275,6 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
 
     public void setTicketPricesPanel(JPanel ticketPricesPanel) {
         this.ticketPricesPanel = ticketPricesPanel;
-    }
-
-    public JButton getUpdateBtn() {
-        return updateBtn;
-    }
-
-    public void setUpdateBtn(JButton updateBtn) {
-        this.updateBtn = updateBtn;
     }
 
     public JLabel getUriLabel() {

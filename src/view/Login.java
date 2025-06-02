@@ -162,7 +162,7 @@ public class Login extends javax.swing.JFrame {
             return;
         }
 
-        boolean isAdmin = false; // Anda bisa menambahkan radio button untuk memilih jenis login
+        boolean isAdmin = true; 
         
         boolean authenticated;
         if (isAdmin) {
@@ -173,7 +173,7 @@ public class Login extends javax.swing.JFrame {
 
         if (authenticated) {
             if (isAdmin) {
-                new AdminMainFrm().setVisible(true);
+                new AdminDashboard().setVisible(true);
             } else {
                 new CustomerDashboard().setVisible(true);
             }
@@ -207,7 +207,7 @@ public class Login extends javax.swing.JFrame {
         }
     }
 
-    private boolean isCustomer = true;
+    private boolean isCustomer = false;
 
     public void setIsCustomer(boolean isCustomer) {
         this.isCustomer = isCustomer;

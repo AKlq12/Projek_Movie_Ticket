@@ -1,47 +1,104 @@
 package model;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Booking {
     private int id;
-    private int userId;
-    private int bookedMovieId;
+    private int customerId;
+    private int movieId;
+    private String movieTitle;
+    private String genre;
     private String seat;
-    private int noOfTickets;
-    private Date purchasedDate;
-    private Date bookedDate;
+    private Timestamp purchasedDate;
     private int totalAmount;
-    
-    // Constructors, getters, and setters
-    public Booking() {}
+    private Timestamp createdAt;
 
-    public Booking(int id, int userId, int bookedMovieId, String seat, int noOfTickets, 
-                 Date purchasedDate, Date bookedDate, int totalAmount) {
+    // Constructor
+    public Booking() {}
+    
+    public Booking(int id, int customerId, int movieId, String movieTitle, String genre, 
+                   String seat, Timestamp purchasedDate, int totalAmount, Timestamp createdAt) {
         this.id = id;
-        this.userId = userId;
-        this.bookedMovieId = bookedMovieId;
+        this.customerId = customerId;
+        this.movieId = movieId;
+        this.movieTitle = movieTitle;
+        this.genre = genre;
         this.seat = seat;
-        this.noOfTickets = noOfTickets;
         this.purchasedDate = purchasedDate;
-        this.bookedDate = bookedDate;
+        this.totalAmount = totalAmount;
+        this.createdAt = createdAt;
+    }
+
+    // Getters and Setters
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
+    }
+
+    public int getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(int movieId) {
+        this.movieId = movieId;
+    }
+
+    public String getMovieTitle() {
+        return movieTitle;
+    }
+
+    public void setMovieTitle(String movieTitle) {
+        this.movieTitle = movieTitle;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public String getSeat() {
+        return seat;
+    }
+
+    public void setSeat(String seat) {
+        this.seat = seat;
+    }
+
+    public Timestamp getPurchasedDate() {
+        return purchasedDate;
+    }
+
+    public void setPurchasedDate(Timestamp purchasedDate) {
+        this.purchasedDate = purchasedDate;
+    }
+
+    public int getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(int totalAmount) {
         this.totalAmount = totalAmount;
     }
 
-    // Getters and setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-    public int getUserId() { return userId; }
-    public void setUserId(int userId) { this.userId = userId; }
-    public int getBookedMovieId() { return bookedMovieId; }
-    public void setBookedMovieId(int bookedMovieId) { this.bookedMovieId = bookedMovieId; }
-    public String getSeat() { return seat; }
-    public void setSeat(String seat) { this.seat = seat; }
-    public int getNoOfTickets() { return noOfTickets; }
-    public void setNoOfTickets(int noOfTickets) { this.noOfTickets = noOfTickets; }
-    public Date getPurchasedDate() { return purchasedDate; }
-    public void setPurchasedDate(Date purchasedDate) { this.purchasedDate = purchasedDate; }
-    public Date getBookedDate() { return bookedDate; }
-    public void setBookedDate(Date bookedDate) { this.bookedDate = bookedDate; }
-    public int getTotalAmount() { return totalAmount; }
-    public void setTotalAmount(int totalAmount) { this.totalAmount = totalAmount; }
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
 }

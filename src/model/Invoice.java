@@ -3,7 +3,9 @@ package model;
 import java.sql.Date;
 
 public class Invoice {
-    private String seat;
+    private int userId;
+    private int bookingId;
+    private String seats;
     private int noOfTickets;
     private Date bookedDate;
     private String showtime;
@@ -12,9 +14,12 @@ public class Invoice {
     private String screen;
 
     // Constructor
-    public Invoice(String seat, int noOfTickets, Date bookedDate, String showtime, 
-                  int totalAmount, String movieTitle, String screen) {
-        this.seat = seat;
+    public Invoice(int userId, int bookingId, String seats, int noOfTickets, 
+                  Date bookedDate, String showtime, int totalAmount, 
+                  String movieTitle, String screen) {
+        this.userId = userId;
+        this.bookingId = bookingId;
+        this.seats = seats;
         this.noOfTickets = noOfTickets;
         this.bookedDate = bookedDate;
         this.showtime = showtime;
@@ -24,7 +29,9 @@ public class Invoice {
     }
 
     // Getters
-    public String getSeat() { return seat; }
+    public int getUserId() { return userId; }
+    public int getBookingId() { return bookingId; }
+    public String getSeats() { return seats; }
     public int getNoOfTickets() { return noOfTickets; }
     public Date getBookedDate() { return bookedDate; }
     public String getShowtime() { return showtime; }

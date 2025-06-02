@@ -4,48 +4,75 @@ import controller.InvoiceController;
 import model.Invoice;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Date;
 import java.text.SimpleDateFormat;
 import javax.imageio.ImageIO;
-
+import javax.swing.JOptionPane;
 
 public class InvoiceFrm extends javax.swing.JFrame {
+
     private InvoiceController invoiceController;
 
     public InvoiceFrm() {
         initComponents();
         invoiceController = new InvoiceController();
+        setLocationRelativeTo(null); // Center the window
     }
 
-    public InvoiceFrm(int userId, int bookedId) {
+    public InvoiceFrm(int userId, int bookingId) {
         initComponents();
         invoiceController = new InvoiceController();
-        loadInvoiceData(userId, bookedId);
+        loadInvoiceData(userId, bookingId);
         loadFrameImage();
+        setLocationRelativeTo(null); // Center the window
     }
-    
-    private void loadInvoiceData(int userId, int bookedId) {
-        Invoice invoice = invoiceController.getInvoice(userId, bookedId);
-        if (invoice != null) {
-            seats.setText(invoice.getSeat());
-            noOfTck.setText(String.valueOf(invoice.getNoOfTickets()));
-            
-            // Format date
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            date.setText(dateFormat.format(invoice.getBookedDate()));
-            
-            showtime.setText(invoice.getShowtime());
-            totalAmount.setText("Rs. " + invoice.getTotalAmount() + ".00");
-            movieName.setText(invoice.getMovieTitle());
-            screen.setText(invoice.getScreen());
+
+    private void loadInvoiceData(int userId, int bookingId) {
+        try {
+            Invoice invoice = invoiceController.getInvoice(userId, bookingId);
+            if (invoice != null) {
+                // Set all the invoice data to the form components
+                seats.setText(invoice.getSeats());
+                noOfTck.setText(String.valueOf(invoice.getNoOfTickets()));
+
+                // Format the date properly
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                date.setText(dateFormat.format(invoice.getBookedDate()));
+
+                showtime.setText(invoice.getShowtime());
+                totalAmount.setText("Rs. " + String.format("%,d", invoice.getTotalAmount()) + ".00");
+                movieName.setText(invoice.getMovieTitle());
+                screen.setText(invoice.getScreen());
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Invoice data not found for this booking",
+                        "Invoice Error",
+                        JOptionPane.ERROR_MESSAGE);
+                this.dispose();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error loading invoice: " + e.getMessage(),
+                    "System Error",
+                    JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+            this.dispose();
         }
     }
 
-    public void loadFrameImage() {
+    private void loadFrameImage() {
         try {
-            setIconImage(ImageIO.read(new File("logo.png")));
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(InvoiceFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            // Try to load from resources first
+            setIconImage(ImageIO.read(getClass().getResource("/images/logo.png")));
+        } catch (IOException | IllegalArgumentException e1) {
+            try {
+                // Fallback to file system
+                setIconImage(ImageIO.read(new File("logo.png")));
+            } catch (IOException e2) {
+                JOptionPane.showMessageDialog(this,
+                        "Could not load application icon",
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE);
+            }
         }
     }
 
