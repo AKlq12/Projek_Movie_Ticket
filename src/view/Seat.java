@@ -1,14 +1,69 @@
 package view;
 
 import javax.swing.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
+import util.DatabaseConnection;
 
 public class Seat extends javax.swing.JFrame {
     
     private java.util.Set<String> selectedSeats = new java.util.HashSet<>();
+    
+    private String idMovie;
+    private String title;
+    private String genre;
+    private String rating;
+    private String time;
+    private String showtime;
 
     public Seat(String idMovie, String title, String genre, String rating, String time, String showtime) {
+        this.idMovie = idMovie;
+        this.title = title;
+        this.genre = genre;
+        this.rating = rating;
+        this.time = time;
+        this.showtime = showtime;
         initComponents();
         setLocationRelativeTo(null);
+    }
+    
+    private void toggleSeatSelection(String seatId) {
+    if (selectedSeats.contains(seatId)) {
+        selectedSeats.remove(seatId);  // Hapus kursi dari pilihan
+    } else {
+        selectedSeats.add(seatId);  // Tambahkan kursi ke pilihan
+    }
+}
+
+    
+    private void saveBooking() {
+        if (selectedSeats.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(null, "Pilih kursi terlebih dahulu.");
+            return;
+        }
+
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            if (conn != null) {
+                String query = "INSERT INTO bookings (id_movie, movie_title, genre, seat) VALUES (?, ?, ?, ?)";
+                PreparedStatement stmt = conn.prepareStatement(query);
+                stmt.setString(1, idMovie);  // ID film
+                stmt.setString(2, title); 
+                stmt.setString(3, genre);
+                stmt.setString(4, String.join(",", selectedSeats)); // Gabungkan kursi yang dipilih dengan koma
+                
+                int rowsAffected = stmt.executeUpdate();
+                if (rowsAffected > 0) {
+                    javax.swing.JOptionPane.showMessageDialog(null, "Pemesanan berhasil!");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            javax.swing.JOptionPane.showMessageDialog(null, "Gagal menyimpan pemesanan.");
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -710,7 +765,7 @@ public class Seat extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
-        // TODO add your handling code here:
+        toggleSeatSelection("A1");
     }//GEN-LAST:event_jButton14ActionPerformed
 
     private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
@@ -822,7 +877,7 @@ public class Seat extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton41ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        saveBooking();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     public static void main(String args[]) {

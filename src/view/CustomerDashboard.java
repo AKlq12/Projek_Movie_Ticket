@@ -8,6 +8,12 @@ import javax.swing.table.DefaultTableModel;
 import util.DatabaseConnection;
 
 public class CustomerDashboard extends javax.swing.JFrame {
+    private String selectedIdMovie;
+    private String selectedTitle;
+    private String selectedGenre;
+    private String selectedRating;
+    private String selectedTime;
+    private String selectedShowtime;
     
     private void loadData() {
     DefaultTableModel model = new DefaultTableModel(new String[]{"ID Movie", "Title", "Genre", "Rating", "Date",  "Duration", "Showtime"}, 0);
@@ -40,26 +46,27 @@ public class CustomerDashboard extends javax.swing.JFrame {
     public CustomerDashboard() {
         initComponents();
         loadData();
+        
         next.addActionListener(new java.awt.event.ActionListener() {
-    public void actionPerformed(java.awt.event.ActionEvent evt) {
-        int selectedRow = jTable1.getSelectedRow();
-        if (selectedRow != -1) {
-            String idMovie = jTable1.getValueAt(selectedRow, 0).toString();
-            String title = jTable1.getValueAt(selectedRow, 1).toString();
-            String genre = jTable1.getValueAt(selectedRow, 2).toString();
-            String rating = jTable1.getValueAt(selectedRow, 3).toString();
-            String time = jTable1.getValueAt(selectedRow, 4).toString();
-            String showtime = jTable1.getValueAt(selectedRow, 5).toString();
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                int selectedRow = jTable1.getSelectedRow();
+                if (selectedRow != -1) {
+                    String idMovie = jTable1.getValueAt(selectedRow, 0).toString();
+                    String title = jTable1.getValueAt(selectedRow, 1).toString();
+                    String genre = jTable1.getValueAt(selectedRow, 2).toString();
+                    String rating = jTable1.getValueAt(selectedRow, 3).toString();
+                    String time = jTable1.getValueAt(selectedRow, 4).toString();
+                    String showtime = jTable1.getValueAt(selectedRow, 5).toString();
 
-            // Buat objek Seat dan oper data film
-            Seat seatFrame = new Seat(idMovie, title, genre, rating, time, showtime);
-            seatFrame.setVisible(true);
-            dispose(); // Tutup jendela saat ini jika ingin
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(null, "Pilih film terlebih dahulu.");
-        }
-    }
-});
+                    // Buat objek Seat dan oper data film
+                    Seat seatFrame = new Seat(idMovie, title, genre, rating, time, showtime);
+                    seatFrame.setVisible(true);
+                    dispose(); // Tutup jendela saat ini jika ingin
+                } else {
+                    javax.swing.JOptionPane.showMessageDialog(null, "Pilih film terlebih dahulu.");
+                }
+            }
+        });
 
         setLocationRelativeTo(null);
     }
@@ -147,12 +154,7 @@ public class CustomerDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     public static void main(String args[]) {
-
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new CustomerDashboard().setVisible(true);
-            }
-        });
+        java.awt.EventQueue.invokeLater(() -> new CustomerDashboard().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
