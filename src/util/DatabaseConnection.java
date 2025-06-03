@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import javax.swing.*;
 
 public class DatabaseConnection {
-    private static final String URL = "jdbc:mysql://localhost:3306/bioskop_db";
+    private static final String URL = "jdbc:mysql://localhost:3306/db_bioskop";
     private static final String USER = "root"; // Ganti jika perlu
     private static final String PASSWORD = ""; // Ganti jika perlu
     
