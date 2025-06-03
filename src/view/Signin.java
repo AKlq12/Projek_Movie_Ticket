@@ -239,11 +239,11 @@ public class Signin extends javax.swing.JFrame {
     private boolean registerCustomer(String email, String username, String password) {
         // Existing customer registration code
         Connection connection = DatabaseConnection.getConnection();
-        String query = "INSERT INTO customer (email, username, password) VALUES (?, ?, ?,)";
+        String query = "INSERT INTO customer (username, email, password) VALUES (?, ?, ?)";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, email);
-            statement.setString(2, username);
+            statement.setString(1, username);
+            statement.setString(2, email);
             statement.setString(3, password);
 
             int rowsAffected = statement.executeUpdate();
