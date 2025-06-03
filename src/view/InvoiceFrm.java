@@ -150,40 +150,40 @@ public class InvoiceFrm extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("BRAINCELL CINEMA");
+        jLabel1.setText("Aklq 12 Cinema");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(38, Short.MAX_VALUE)
+                .addContainerGap(65, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addGap(33, 33, 33))
+                .addGap(59, 59, 59))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jLabel1)
-                .addContainerGap())
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 300, 50));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel2.setText("Movie name");
+        jLabel2.setText("Id Movie");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
         jPanel1.add(movieName, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, -1, -1));
         jPanel1.add(screen, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel5.setText("Screen");
+        jLabel5.setText("Movie Title");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, -1, -1));
         jPanel1.add(date, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel7.setText("Date");
+        jLabel7.setText("Genre");
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, -1, -1));
         jPanel1.add(seats, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 360, -1, -1));
 
@@ -193,11 +193,11 @@ public class InvoiceFrm extends javax.swing.JFrame {
         jPanel1.add(showtime, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, -1, -1));
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel13.setText("Showtime");
+        jLabel13.setText("Seat");
         jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, -1, -1));
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel14.setText("Seats");
+        jLabel14.setText("Purchased Date");
         jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, -1, -1));
 
         jPanel3.setBackground(new java.awt.Color(0, 0, 0));
@@ -231,7 +231,7 @@ public class InvoiceFrm extends javax.swing.JFrame {
         jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 460, -1, 5));
 
         jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel15.setText("Total Amount");
+        jLabel15.setText("Total Price");
         jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 390, -1, -1));
 
         jPanel5.setBackground(new java.awt.Color(0, 0, 0));
