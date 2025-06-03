@@ -9,7 +9,7 @@ import util.DatabaseConnection;
 public class AuthController {
     public boolean authenticateAdmin(String username, String password) {
         Connection connection = DatabaseConnection.getConnection();
-        String query = "SELECT * FROM admin WHERE username = ? AND password = SHA2(?, 256)";
+        String query = "SELECT * FROM admin WHERE username = ? AND password = ?";
         
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, username);
@@ -31,7 +31,7 @@ public class AuthController {
     
     public boolean authenticateCustomer(String username, String password) {
         Connection connection = DatabaseConnection.getConnection();
-        String query = "SELECT * FROM customer WHERE username = ? AND password = SHA2(?, 256)";
+        String query = "SELECT * FROM customer WHERE username = ? AND password = ?";
         
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, username);

@@ -10,6 +10,7 @@ import model.Booking;
 import model.Movie;
 import view.AdminDashboard;
 import view.CreateMovieFrm;
+import view.PilihLogin;
 import view.UpdateMovieFrm;
 
 public class AdminDashboardController {
@@ -24,6 +25,9 @@ public class AdminDashboardController {
         
         initController();
         loadMovieData();
+        
+        view.getManageMoviePanel().setVisible(true);
+        view.getViewBookingPanel().setVisible(false);
     }
 
     private void initController() {
@@ -60,8 +64,7 @@ public class AdminDashboardController {
 
     private void logout() {
         view.dispose();
-        // You would typically open a login window here
-        // new LoginForm().setVisible(true);
+        new PilihLogin().setVisible(true);
         JOptionPane.showMessageDialog(view, "Logged out successfully!");
     }
 
@@ -133,21 +136,19 @@ public class AdminDashboardController {
 
     private void populateBookingTable(List<Booking> bookings) {
         DefaultTableModel model = (DefaultTableModel) view.getViewBookingsTable().getModel();
-        model.setRowCount(0); // Clear existing data
+        model.setRowCount(0);
         
         for (Booking booking : bookings) {
-            Object[] row = {
+            model.addRow(new Object[]{
                 booking.getId(),
-                booking.getCustomerId(),
                 booking.getMovieId(),
                 booking.getMovieTitle(),
                 booking.getGenre(),
                 booking.getSeat(),
+                booking.getTotalPrice(),
                 booking.getPurchasedDate(),
-                booking.getTotalAmount(),
                 booking.getCreatedAt()
-            };
-            model.addRow(row);
+            });
         }
     }
 }

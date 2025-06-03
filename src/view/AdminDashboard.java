@@ -136,17 +136,17 @@ public class AdminDashboard extends javax.swing.JFrame {
 
         viewBookingsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "id_book", "id_customer", "id_movie", "movie_title", "genre", "seat", "purchased_date", "total_amount", "created_at"
+                "id_booking", "id_movie", "movie_title", "genre", "seat", "total_price", "purchased_date", "created_at"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {

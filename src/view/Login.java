@@ -1,5 +1,6 @@
 package view;
 
+import controller.AdminDashboardController;
 import java.sql.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -103,9 +104,9 @@ public class Login extends javax.swing.JFrame {
                         .addGap(158, 158, 158)
                         .addComponent(jTextUsernameLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
+                        .addContainerGap()
                         .addComponent(jLabel2)
-                        .addGap(75, 75, 75)
+                        .addGap(86, 86, 86)
                         .addComponent(jLabel4))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(160, 160, 160)
@@ -175,7 +176,10 @@ public class Login extends javax.swing.JFrame {
 
         if (authenticated) {
             if ("admin".equals(userType)) {
-                new AdminDashboard().setVisible(true);
+                AdminDashboard adminDashboard = new AdminDashboard();
+                new AdminDashboardController(adminDashboard);
+                adminDashboard.setVisible(true);
+
             } else {
                 new CustomerDashboard().setVisible(true);
             }
