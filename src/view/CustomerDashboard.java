@@ -16,13 +16,13 @@ public class CustomerDashboard extends javax.swing.JFrame {
     private String selectedShowtime;
     
     private void loadData() {
-    DefaultTableModel model = new DefaultTableModel(new String[]{"ID Movie", "Title", "Genre", "Rating", "Date",  "Duration", "Showtime"}, 0);
+    DefaultTableModel model = new DefaultTableModel(new String[]{"ID Movie", "Title", "Genre", "Rating", "Date",  "Duration", "Showtime", "Price"}, 0);
 
     try {
         Connection conn = DatabaseConnection.getConnection(); // Gunakan koneksi dari class util
         if (conn != null) {
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT id_movie, movie_title, genre, rating, date, time, showtime FROM movies");
+            ResultSet rs = stmt.executeQuery("SELECT id_movie, movie_title, genre, rating, date, time, showtime, ticket_price FROM movies");
 
             while (rs.next()) {
                 String id = rs.getString("id_movie");
@@ -32,8 +32,9 @@ public class CustomerDashboard extends javax.swing.JFrame {
                 String date = rs.getString("date");
                 String time = rs.getString("time");
                 String showtime = rs.getString("showtime");
+                String ticket = rs.getString("ticket_price");
 
-                model.addRow(new Object[]{id, title, genre, rating, date, time, showtime});
+                model.addRow(new Object[]{id, title, genre, rating, date, time, showtime, ticket});
             }
 
             jTable1.setModel(model);

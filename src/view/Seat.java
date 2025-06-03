@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 import util.DatabaseConnection;
+import java.sql.ResultSet;
 
 public class Seat extends javax.swing.JFrame {
     
@@ -18,6 +19,8 @@ public class Seat extends javax.swing.JFrame {
     private String rating;
     private String time;
     private String showtime;
+    private double ticketPrice = 0.0; // Harga tiket akan diambil dari database
+    private double totalPrice = 0.0;
 
     public Seat(String idMovie, String title, String genre, String rating, String time, String showtime) {
         this.idMovie = idMovie;
@@ -26,8 +29,30 @@ public class Seat extends javax.swing.JFrame {
         this.rating = rating;
         this.time = time;
         this.showtime = showtime;
+        
+        getTicketPrice();
+        
         initComponents();
         setLocationRelativeTo(null);
+    }
+    
+    private void getTicketPrice() {
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            if (conn != null) {
+                String query = "SELECT ticket_price FROM movies WHERE id_movie = ?";
+                PreparedStatement stmt = conn.prepareStatement(query);
+                stmt.setString(1, idMovie);  // ID film
+                ResultSet rs = stmt.executeQuery();
+                
+                if (rs.next()) {
+                    ticketPrice = rs.getDouble("ticket_price"); // Ambil harga tiket dari database
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            javax.swing.JOptionPane.showMessageDialog(null, "Gagal mengambil harga tiket.");
+        }
     }
     
     private void toggleSeatSelection(String seatId) {
@@ -36,7 +61,12 @@ public class Seat extends javax.swing.JFrame {
     } else {
         selectedSeats.add(seatId);  // Tambahkan kursi ke pilihan
     }
+    calculateTotalPrice();
 }
+    
+    private void calculateTotalPrice() {
+        totalPrice = ticketPrice * selectedSeats.size(); // Menghitung total harga
+    }
 
     
     private void saveBooking() {
@@ -48,12 +78,13 @@ public class Seat extends javax.swing.JFrame {
         try {
             Connection conn = DatabaseConnection.getConnection();
             if (conn != null) {
-                String query = "INSERT INTO bookings (id_movie, movie_title, genre, seat) VALUES (?, ?, ?, ?)";
+                String query = "INSERT INTO bookings (id_movie, movie_title, genre, seat, total_price) VALUES (?, ?, ?, ?, ?)";
                 PreparedStatement stmt = conn.prepareStatement(query);
                 stmt.setString(1, idMovie);  // ID film
                 stmt.setString(2, title); 
                 stmt.setString(3, genre);
                 stmt.setString(4, String.join(",", selectedSeats)); // Gabungkan kursi yang dipilih dengan koma
+                stmt.setDouble(5, totalPrice);
                 
                 int rowsAffected = stmt.executeUpdate();
                 if (rowsAffected > 0) {
