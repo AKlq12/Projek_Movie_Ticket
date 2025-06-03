@@ -1,15 +1,17 @@
 package model;
 
 import java.sql.Timestamp;
+import java.sql.Date;
+import java.sql.Time;
 
 public class Movie {
     private int id;
     private String title;
     private String genre;
     private double rating;
-    private String date;
-    private String time;
-    private String showtime;
+    private Date date;  // java.sql.Date
+    private Time time;  // java.sql.Time
+    private Time showtime;  // java.sql.Time
     private String contentRating;
     private String description;
     private String screen;
@@ -22,8 +24,8 @@ public class Movie {
     // Constructor
     public Movie() {}
     
-    public Movie(int id, String title, String genre, double rating, String date, String time, 
-                 String showtime, String contentRating, String description, String screen, 
+    public Movie(int id, String title, String genre, double rating, Date date, Time time, 
+                 Time showtime, String contentRating, String description, String screen, 
                  int ticketPrice, String uri, byte[] poster, Timestamp createdAt, Timestamp updatedAt) {
         this.id = id;
         this.title = title;
@@ -75,27 +77,27 @@ public class Movie {
         this.rating = rating;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
-    public String getTime() {
+    public Time getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(Time time) {
         this.time = time;
     }
 
-    public String getShowtime() {
+    public Time getShowtime() {
         return showtime;
     }
 
-    public void setShowtime(String showtime) {
+    public void setShowtime(Time showtime) {
         this.showtime = showtime;
     }
 

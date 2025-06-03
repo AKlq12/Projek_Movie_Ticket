@@ -365,9 +365,6 @@
             </Component>
             <Component class="javax.swing.JComboBox" name="contRatingCombo">
               <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="36" green="22" red="24" type="rgb"/>
-                </Property>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="5">
                     <StringItem index="0" value="G"/>
@@ -391,76 +388,78 @@
             </Property>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                <TitledBorder justification="1" position="2" title="Runtime"/>
+                <TitledBorder justification="1" position="2" title="Date"/>
               </Border>
             </Property>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="220" y="210" width="160" height="-1"/>
+              <AbsoluteConstraints x="220" y="190" width="160" height="150"/>
             </Constraint>
           </Constraints>
 
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="hoursLabel" min="-2" max="-2" attributes="0"/>
-                          <Component id="hourSpinner" alignment="0" min="-2" pref="41" max="-2" attributes="0"/>
+                          <Component id="jDateChooser1" alignment="0" pref="138" max="32767" attributes="0"/>
+                          <Component id="timeSpinner" max="32767" attributes="0"/>
+                          <Component id="showtimeSpinner" alignment="0" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="minutesLabel" min="-2" max="-2" attributes="0"/>
-                          <Component id="minuteSpinner" min="-2" pref="41" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace pref="25" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
+                      <Component id="jDateChooser1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="hoursLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="minutesLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="hourSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="minuteSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace pref="15" max="32767" attributes="0"/>
+                      <Component id="timeSpinner" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="showtimeSpinner" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="hoursLabel">
+            <Component class="com.toedter.calendar.JDateChooser" name="jDateChooser1">
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabel1">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Hours:"/>
+                <Property name="text" type="java.lang.String" value="Time"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JSpinner" name="hourSpinner">
+            <Component class="javax.swing.JSpinner" name="timeSpinner">
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JSpinner()"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="SpinnerDateModel timeModel = new SpinnerDateModel();&#xa;timeSpinner.setModel(timeModel);  // Set the model for the JSpinner&#xa;&#xa;// Set the spinner editor to display time in HH:mm:ss format&#xa;JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(timeSpinner, &quot;HH:mm:ss&quot;);&#xa;timeSpinner.setEditor(timeEditor);  // Apply the DateEditor with time format"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabel2">
               <Properties>
-                <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-                  <SpinnerModel initial="1" maximum="4" minimum="1" numberType="java.lang.Integer" stepSize="1" type="number"/>
-                </Property>
+                <Property name="text" type="java.lang.String" value="Showtime"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="minutesLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Minutes:"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JSpinner" name="minuteSpinner">
-              <Properties>
-                <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-                  <SpinnerModel initial="0" maximum="59" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
-                </Property>
-              </Properties>
+            <Component class="javax.swing.JSpinner" name="showtimeSpinner">
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JSpinner()"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="SpinnerDateModel showtimeModel = new SpinnerDateModel();&#xa;showtimeSpinner.setModel(showtimeModel);&#xa;&#xa;// Set the editor with the time format HH:mm:ss&#xa;JSpinner.DateEditor showtimeEditor = new JSpinner.DateEditor(showtimeSpinner, &quot;HH:mm:ss&quot;);&#xa;showtimeSpinner.setEditor(showtimeEditor);"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>
@@ -477,7 +476,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="30" y="310" width="350" height="-1"/>
+              <AbsoluteConstraints x="30" y="333" width="350" height="100"/>
             </Constraint>
           </Constraints>
 
@@ -489,7 +488,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane1" alignment="0" pref="100" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" alignment="0" pref="77" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -535,12 +534,10 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="tckPrcLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="tckPrcTextField" min="-2" pref="33" max="-2" attributes="0"/>
-                      <EmptySpace pref="23" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="tckPrcTextField" pref="115" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -549,28 +546,23 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="tckPrcLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="tckPrcTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="15" max="32767" attributes="0"/>
+                      <EmptySpace pref="19" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="tckPrcLabel">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Set price :"/>
-              </Properties>
-            </Component>
             <Component class="javax.swing.JLabel" name="jLabel10">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Rs."/>
+                <Property name="text" type="java.lang.String" value="Rp."/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="tckPrcTextField">
               <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tckPrcTextFieldActionPerformed"/>
                 <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tckPrcTextFieldKeyPressed"/>
               </Events>
             </Component>
@@ -590,9 +582,9 @@
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="3">
-                <StringItem index="0" value="Screen 1"/>
-                <StringItem index="1" value="Screen 2"/>
-                <StringItem index="2" value="Screen 3"/>
+                <StringItem index="0" value="Studio 1"/>
+                <StringItem index="1" value="Studio 2"/>
+                <StringItem index="2" value="Studio 3"/>
               </StringArray>
             </Property>
           </Properties>

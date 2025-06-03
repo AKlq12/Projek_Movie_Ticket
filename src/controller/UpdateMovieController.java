@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
@@ -14,6 +15,7 @@ import model.Movie;
 import view.UpdateMovieFrm;
 
 public class UpdateMovieController {
+
     private UpdateMovieFrm view;
     private AdminDashboardController dashboardController;
     private MovieDAO movieDAO;
@@ -24,7 +26,7 @@ public class UpdateMovieController {
         this.dashboardController = dashboardController;
         this.movieDAO = new MovieDAO();
         this.movieId = view.getId();
-        
+
         initController();
     }
 
@@ -35,7 +37,7 @@ public class UpdateMovieController {
                 updateMovie();
             }
         });
-        
+
         view.getBrowsePosterBtn().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -47,12 +49,12 @@ public class UpdateMovieController {
     private void updateMovie() {
         // Get all selected genres
         List<String> selectedGenres = getSelectedGenres();
-        
+
         if (selectedGenres.isEmpty()) {
             JOptionPane.showMessageDialog(view, "Please select at least one genre.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
+
         // Create movie object
         Movie movie = new Movie();
         movie.setId(movieId);
@@ -63,15 +65,23 @@ public class UpdateMovieController {
         movie.setDescription(view.getDescriptionTextArea().getText());
         movie.setScreen(view.getScreenCombo().getSelectedItem().toString());
         
+        // Handle null date case
+        Date selectedDate = view.getjDateChooser1().getDate();
+        if (selectedDate == null) {
+            JOptionPane.showMessageDialog(view, "Please select a valid date.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;  // Exit if no valid date is selected
+        }
+        movie.setDate(selectedDate);
+        
         try {
             movie.setTicketPrice(Integer.parseInt(view.getTckPrcTextField().getText()));
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(view, "Please enter a valid ticket price.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
+
         movie.setUri(view.getUriTextField().getText());
-        
+
         // Set poster if available
         if (view.getPoster() != null) {
             movie.setPoster(view.getPoster());
@@ -79,13 +89,14 @@ public class UpdateMovieController {
             // Keep existing poster if no new one was selected
             movie.setPoster(view.getPosterBytes());
         }
-        
+
         // Validate required fields
         if (movie.getTitle().isEmpty() || movie.getDescription().isEmpty() || movie.getUri().isEmpty()) {
             JOptionPane.showMessageDialog(view, "Please fill all required fields.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
+       
+
         // Update in database
         try {
             if (movieDAO.updateMovie(movie)) {
@@ -114,24 +125,24 @@ public class UpdateMovieController {
             view.getFantasyCheckBox(),
             view.getDramaCheckBox()
         };
-        
+
         for (JCheckBox checkbox : genreCheckboxes) {
             if (checkbox.isSelected()) {
                 genres.add(checkbox.getText());
             }
         }
-        
+
         return genres;
     }
 
     private void browsePoster() {
         javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
         int returnValue = fileChooser.showOpenDialog(view);
-        
+
         if (returnValue == javax.swing.JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             view.getPosterImgPath().setText(selectedFile.getAbsolutePath());
-            
+
             try (FileInputStream fis = new FileInputStream(selectedFile)) {
                 byte[] posterData = new byte[(int) selectedFile.length()];
                 fis.read(posterData);

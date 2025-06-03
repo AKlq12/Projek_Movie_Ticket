@@ -47,9 +47,6 @@ public class AdminDashboard extends javax.swing.JFrame {
         ViewBookingPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         viewBookingsTable = new javax.swing.JTable();
-        SearchTextField = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        ViewInvoice = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("admin");
@@ -161,18 +158,6 @@ public class AdminDashboard extends javax.swing.JFrame {
         jScrollPane1.setViewportView(viewBookingsTable);
 
         ViewBookingPanel.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 80, 600, 370));
-        ViewBookingPanel.add(SearchTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 50, 180, -1));
-
-        jLabel1.setText("Cari");
-        ViewBookingPanel.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 50, 30, 20));
-
-        ViewInvoice.setText("View Invoice");
-        ViewInvoice.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ViewInvoiceActionPerformed(evt);
-            }
-        });
-        ViewBookingPanel.add(ViewInvoice, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 50, -1, -1));
 
         getContentPane().add(ViewBookingPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 0, 720, 500));
 
@@ -206,10 +191,6 @@ public class AdminDashboard extends javax.swing.JFrame {
     private void viewBookingsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewBookingsTableMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_viewBookingsTableMouseClicked
-
-    private void ViewInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewInvoiceActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ViewInvoiceActionPerformed
 
     
     /**
@@ -245,12 +226,9 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JPanel ManageMoviePanel;
     private javax.swing.JTable MovieTable;
     private javax.swing.JPanel NavPanel;
-    private javax.swing.JTextField SearchTextField;
     private javax.swing.JPanel ViewBookingPanel;
-    private javax.swing.JButton ViewInvoice;
     private javax.swing.JButton createBtn;
     private javax.swing.JButton editBtn;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton logoutBtn;
@@ -283,28 +261,12 @@ public class AdminDashboard extends javax.swing.JFrame {
         this.NavPanel = NavPanel;
     }
 
-    public JTextField getSearchTextField() {
-        return SearchTextField;
-    }
-
-    public void setSearchTextField(JTextField SearchTextField) {
-        this.SearchTextField = SearchTextField;
-    }
-
     public JPanel getViewBookingPanel() {
         return ViewBookingPanel;
     }
 
     public void setViewBookingPanel(JPanel ViewBookingPanel) {
         this.ViewBookingPanel = ViewBookingPanel;
-    }
-
-    public JButton getViewInvoice() {
-        return ViewInvoice;
-    }
-
-    public void setViewInvoice(JButton ViewInvoice) {
-        this.ViewInvoice = ViewInvoice;
     }
 
     public JButton getCreateBtn() {
@@ -321,14 +283,6 @@ public class AdminDashboard extends javax.swing.JFrame {
 
     public void setEditBtn(JButton editBtn) {
         this.editBtn = editBtn;
-    }
-
-    public JLabel getjLabel1() {
-        return jLabel1;
-    }
-
-    public void setjLabel1(JLabel jLabel1) {
-        this.jLabel1 = jLabel1;
     }
 
     public JScrollPane getjScrollPane1() {

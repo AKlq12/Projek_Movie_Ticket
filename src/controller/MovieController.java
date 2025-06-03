@@ -4,6 +4,8 @@ import dao.MovieDAO;
 import model.Movie;
 import java.sql.Blob;
 import java.util.List;
+import java.sql.Date;
+import java.sql.Time;
 
 public class MovieController {
     private MovieDAO movieDAO;
@@ -12,7 +14,7 @@ public class MovieController {
         this.movieDAO = new MovieDAO();
     }
 
-    public boolean addMovie(String title, String genre, double rating, String date, String time, String showtime,
+    public boolean addMovie(String title, String genre, double rating, Date date, Time time, Time showtime,
                             String contentRating, String description, String screen, 
                             int ticketPrice, String uri, Blob poster) {
         Movie movie = new Movie();
@@ -31,7 +33,7 @@ public class MovieController {
         return movieDAO.addMovie(movie);
     }
 
-    public boolean updateMovie(int id, String title, String genre, double rating, String date, String time, String showtime
+    public boolean updateMovie(int id, String title, String genre, double rating, Date date, Time time, Time showtime
                             , String contentRating, String description, 
                              String screen, int ticketPrice, String uri, Blob poster) {
         Movie movie = new Movie();

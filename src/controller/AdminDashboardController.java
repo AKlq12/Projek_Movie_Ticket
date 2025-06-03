@@ -12,6 +12,7 @@ import view.AdminDashboard;
 import view.CreateMovieFrm;
 import view.PilihLogin;
 import view.UpdateMovieFrm;
+import java.sql.Date;
 
 public class AdminDashboardController {
     private AdminDashboard view;
@@ -37,7 +38,6 @@ public class AdminDashboardController {
         view.getLogoutBtn().addActionListener(e -> logout());
         view.getCreateBtn().addActionListener(e -> openCreateMovieForm());
         view.getEditBtn().addActionListener(e -> openUpdateMovieForm());
-        view.getViewInvoice().addActionListener(e -> viewInvoice());
         
         // Add table selection listener
         view.getMovieTable().getSelectionModel().addListSelectionListener(e -> {
@@ -45,9 +45,6 @@ public class AdminDashboardController {
                 view.getEditBtn().setEnabled(view.getMovieTable().getSelectedRow() != -1);
             }
         });
-        
-        // Add search functionality
-        view.getSearchTextField().addActionListener(e -> searchBookings());
     }
 
     private void showMoviePanel() {
@@ -95,12 +92,6 @@ public class AdminDashboardController {
         } else {
             JOptionPane.showMessageDialog(view, "Please select a booking to view invoice.");
         }
-    }
-
-    private void searchBookings() {
-        String searchTerm = view.getSearchTextField().getText();
-        List<Booking> bookings = bookingDAO.searchBookings(searchTerm);
-        populateBookingTable(bookings);
     }
 
     public void loadMovieData() {

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import util.DatabaseConnection;
 
@@ -151,7 +152,9 @@ public class CustomerDashboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        dispose();
+        new PilihLogin().setVisible(true);
+        JOptionPane.showMessageDialog(null, "Logged out successfully!");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     public static void main(String args[]) {

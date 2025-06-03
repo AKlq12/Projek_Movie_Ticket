@@ -1,5 +1,6 @@
 package view;
 
+import com.toedter.calendar.JDateChooser;
 import controller.UpdateMovieController;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
@@ -11,8 +12,10 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,14 +35,20 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import util.DatabaseConnection;
+import java.sql.Time;
 
 /**
  *
  * @author nadinCodeHat
  */
 public class UpdateMovieFrm extends javax.swing.JFrame {
-
+    
+    private UpdateMovieController controller;
+    private byte[] poster;
+    
     public UpdateMovieFrm() {
+        initComponents();
+        controller = new UpdateMovieController(this);
     }
 
     int id;
@@ -48,16 +57,9 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
         initComponents();
         this.id = movieId;
         loadEditData();
-        loadFrameImage();
     }
-
-    public void loadFrameImage() {
-        try {
-            setIconImage(ImageIO.read(new File("logo.png")));
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(UpdateMovieFrm.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+    
+    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -85,15 +87,15 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
         ratingSpinner = new javax.swing.JSpinner();
         contRatingCombo = new javax.swing.JComboBox<>();
         runtimePanel = new javax.swing.JPanel();
-        hoursLabel = new javax.swing.JLabel();
-        hourSpinner = new javax.swing.JSpinner();
-        minutesLabel = new javax.swing.JLabel();
-        minuteSpinner = new javax.swing.JSpinner();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        jLabel1 = new javax.swing.JLabel();
+        timeSpinner = new javax.swing.JSpinner();
+        jLabel2 = new javax.swing.JLabel();
+        showtimeSpinner = new javax.swing.JSpinner();
         descriptionPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         descriptionTextArea = new javax.swing.JTextArea();
         ticketPricesPanel = new javax.swing.JPanel();
-        tckPrcLabel = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         tckPrcTextField = new javax.swing.JTextField();
         theaterLabel = new javax.swing.JLabel();
@@ -273,7 +275,6 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
 
         ratingSpinner.setModel(new javax.swing.SpinnerNumberModel(1.0d, 1.0d, 10.0d, 1.0d));
 
-        contRatingCombo.setBackground(new java.awt.Color(36, 34, 54));
         contRatingCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "G", "PG", "PG-13", "R", "NC-17" }));
 
         javax.swing.GroupLayout ratingsPanelLayout = new javax.swing.GroupLayout(ratingsPanel);
@@ -311,15 +312,25 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
         mainPanel.add(ratingsPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, 160, 90));
 
         runtimePanel.setBackground(new java.awt.Color(255, 255, 255));
-        runtimePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Runtime", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP));
+        runtimePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Date", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP));
 
-        hoursLabel.setText("Hours:");
+        jLabel1.setText("Time");
 
-        hourSpinner.setModel(new javax.swing.SpinnerNumberModel(1, 1, 4, 1));
+        SpinnerDateModel timeModel = new SpinnerDateModel();
+        timeSpinner.setModel(timeModel);  // Set the model for the JSpinner
 
-        minutesLabel.setText("Minutes:");
+        // Set the spinner editor to display time in HH:mm:ss format
+        JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(timeSpinner, "HH:mm:ss");
+        timeSpinner.setEditor(timeEditor);  // Apply the DateEditor with time format
 
-        minuteSpinner.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
+        jLabel2.setText("Showtime");
+
+        SpinnerDateModel showtimeModel = new SpinnerDateModel();
+        showtimeSpinner.setModel(showtimeModel);
+
+        // Set the editor with the time format HH:mm:ss
+        JSpinner.DateEditor showtimeEditor = new JSpinner.DateEditor(showtimeSpinner, "HH:mm:ss");
+        showtimeSpinner.setEditor(showtimeEditor);
 
         javax.swing.GroupLayout runtimePanelLayout = new javax.swing.GroupLayout(runtimePanel);
         runtimePanel.setLayout(runtimePanelLayout);
@@ -328,29 +339,32 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
             .addGroup(runtimePanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(runtimePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(hoursLabel)
-                    .addComponent(hourSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
-                .addGroup(runtimePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(minutesLabel)
-                    .addComponent(minuteSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(25, Short.MAX_VALUE))
+                    .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+                    .addComponent(timeSpinner)
+                    .addComponent(showtimeSpinner)
+                    .addGroup(runtimePanelLayout.createSequentialGroup()
+                        .addGroup(runtimePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         runtimePanelLayout.setVerticalGroup(
             runtimePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(runtimePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(runtimePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(hoursLabel)
-                    .addComponent(minutesLabel))
+                .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(runtimePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(hourSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(minuteSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(timeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(showtimeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
-        mainPanel.add(runtimePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 210, 160, -1));
+        mainPanel.add(runtimePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 190, 160, 150));
 
         descriptionPanel.setBackground(new java.awt.Color(255, 255, 255));
         descriptionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Description", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP));
@@ -369,18 +383,21 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
         );
         descriptionPanelLayout.setVerticalGroup(
             descriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
         );
 
-        mainPanel.add(descriptionPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, 350, -1));
+        mainPanel.add(descriptionPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 333, 350, 100));
 
         ticketPricesPanel.setBackground(new java.awt.Color(255, 255, 255));
         ticketPricesPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Ticket Price", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP));
 
-        tckPrcLabel.setText("Set price :");
+        jLabel10.setText("Rp.");
 
-        jLabel10.setText("Rs.");
-
+        tckPrcTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tckPrcTextFieldActionPerformed(evt);
+            }
+        });
         tckPrcTextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tckPrcTextFieldKeyPressed(evt);
@@ -393,22 +410,19 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
             ticketPricesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ticketPricesPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tckPrcLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(tckPrcTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tckPrcTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+                .addContainerGap())
         );
         ticketPricesPanelLayout.setVerticalGroup(
             ticketPricesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ticketPricesPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(ticketPricesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tckPrcLabel)
                     .addComponent(jLabel10)
                     .addComponent(tckPrcTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         mainPanel.add(ticketPricesPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 440, 160, 70));
@@ -416,7 +430,7 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
         theaterLabel.setText("Screens");
         mainPanel.add(theaterLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 440, -1, -1));
 
-        screenCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Screen 1", "Screen 2", "Screen 3" }));
+        screenCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Studio 1", "Studio 2", "Studio 3" }));
         mainPanel.add(screenCombo, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 460, 110, -1));
 
         posterImgPath.setEditable(false);
@@ -466,8 +480,6 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
         String movietitle = null;
         String genre = null;
         Double rating = 0.0;
-        int hour = 0;
-        int minute = 0;
         String contentRating = null;
         String description = null;
         String screen = null;
@@ -483,6 +495,9 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
                 genre = rs.getString("genre");
                 rating = rs.getDouble("rating");
                 contentRating = rs.getString("content_rating");
+                Date date = rs.getDate("date");
+                Time time = rs.getTime("time");
+                Time showtime = rs.getTime("showtime");
                 description = rs.getString("description");
                 screen = rs.getString("screen");
                 ticketPrice = String.valueOf(rs.getInt("ticket_price"));
@@ -498,13 +513,14 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
 
         movieTitleTextField.setText(movietitle);
         ratingSpinner.setValue(rating);
-        hourSpinner.setValue(hour);
-        minuteSpinner.setValue(minute);
+        jDateChooser1.setDate(date);
+        timeSpinner.setTime(time);
+        showtimeSpinner.setTime(showtime);
         contRatingCombo.setSelectedItem(contentRating);
         List<String> listGenre = Arrays.asList(genre.split(","));
 
         listGenre.forEach((String gen) -> {
-            switch (gen) {
+            switch (gen.trim()) {
                 case "Adventure":
                     adventureCheckBox.setSelected(true);
                 case "Action":
@@ -654,30 +670,68 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
         checkDramaCheckBox();
 
         String movie_title = movieTitleTextField.getText();
-        String genre = str;
+        String genre = "";  // Initialize genre as an empty string
         Double rating = (Double) ratingSpinner.getValue();
-        Integer hour = (Integer) hourSpinner.getValue();
-        Integer minute = (Integer) minuteSpinner.getValue();
+        Integer time = (Integer) timeSpinner.getValue();
+        Integer showtime = (Integer) showtimeSpinner.getValue();
         String contentRating = contRatingCombo.getSelectedItem().toString();
         String description = descriptionTextArea.getText();
         String screen = screenCombo.getSelectedItem().toString();
         Integer ticketPrice = Integer.parseInt(tckPrcTextField.getText());
         String uri = uriTextField.getText();
         PreparedStatement pst = null;
+
+        StringBuilder genreBuilder = new StringBuilder();
+
+        if (adventureCheckBox.isSelected()) {
+            genreBuilder.append("Adventure, ");
+        }
+        if (actionCheckBox.isSelected()) {
+            genreBuilder.append("Action, ");
+        }
+        if (mysteryCheckBox.isSelected()) {
+            genreBuilder.append("Mystery, ");
+        }
+        if (animationCheckBox.isSelected()) {
+            genreBuilder.append("Animation, ");
+        }
+        if (crimeCheckBox.isSelected()) {
+            genreBuilder.append("Crime, ");
+        }
+        if (comedyCheckBox.isSelected()) {
+            genreBuilder.append("Comedy, ");
+        }
+        if (horrorCheckBox.isSelected()) {
+            genreBuilder.append("Horror, ");
+        }
+        if (thrillerCheckBox.isSelected()) {
+            genreBuilder.append("Thriller, ");
+        }
+        if (fantasyCheckBox.isSelected()) {
+            genreBuilder.append("Fantasy, ");
+        }
+        if (dramaCheckBox.isSelected()) {
+            genreBuilder.append("Drama, ");
+        }
+
+        // Remove the trailing comma and space
+        if (genreBuilder.length() > 0) {
+            genre = genreBuilder.substring(0, genreBuilder.length() - 2); // Remove last ", "
+        }
+        
+        
+
         if (checkEmptyFields()) {
-            String updateMoveQuery = null;
-            if (posterBytes != null && poster == null) {
-                updateMoveQuery = "UPDATE `movies` SET `movie_title` = ?, `genre` = ?, `rating` = ?, `hour` = ?, `minute` = ?, `content_rating` = ?, `description` = ?, `screen` = ?, `ticket_price` = ?, `uir` = ? WHERE id= '" + id + "'";
-            } else {
-                updateMoveQuery = "UPDATE `movies` SET `movie_title` = ?, `genre` = ?, `rating` = ?, `hour` = ?, `minute` = ?, `content_rating` = ?, `description` = ?, `screen` = ?, `ticket_price` = ?, `uir` = ?, `poster` = ? WHERE id= '" + id + "'";
-            }
+            String updateMoveQuery = "UPDATE `movies` SET `movie_title`=?, `genre`=?, `rating`=?, `date`=?, `time`=?, `showtime`=?, `content_rating`=?, `description`=?, `screen`=?, `ticket_price`=?, `uri`=?"
+                    + (poster != null ? ", `poster`=?" : "")
+                    + " WHERE `id_movie`=?";
             try {
                 pst = DatabaseConnection.getConnection().prepareStatement(updateMoveQuery);
                 pst.setString(1, movie_title);
                 pst.setString(2, genre);
                 pst.setDouble(3, rating);
-                pst.setInt(4, hour);
-                pst.setInt(5, minute);
+                pst.setInt(4, time);
+                pst.setInt(5, showtime);
                 pst.setString(6, contentRating);
                 pst.setString(7, description);
                 pst.setString(8, screen);
@@ -686,6 +740,7 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
                 if (posterBytes != null && poster != null) {
                     pst.setBytes(11, poster);
                 }
+
                 pst.executeUpdate();
                 pst.close();
                 DatabaseConnection.getConnection().close();
@@ -823,12 +878,16 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_dramaCheckBoxActionPerformed
 
     private void tckPrcTextFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tckPrcTextFieldKeyPressed
-        if (evt.getKeyChar() >= '0' && evt.getKeyChar() <= '9' && tckPrcTextField.getText().length() < 4 || evt.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+        if (evt.getKeyChar() >= '0' && evt.getKeyChar() <= '9' && tckPrcTextField.getText().length() < 9 || evt.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
             tckPrcTextField.setEditable(true);
         } else {
             tckPrcTextField.setEditable(false);
         }
     }//GEN-LAST:event_tckPrcTextFieldKeyPressed
+
+    private void tckPrcTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tckPrcTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tckPrcTextFieldActionPerformed
 
     /**
      * @param args the command line arguments
@@ -886,13 +945,12 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
     private javax.swing.JCheckBox fantasyCheckBox;
     private javax.swing.JPanel genrePanel;
     private javax.swing.JCheckBox horrorCheckBox;
-    private javax.swing.JSpinner hourSpinner;
-    private javax.swing.JLabel hoursLabel;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel mainPanel;
-    private javax.swing.JSpinner minuteSpinner;
-    private javax.swing.JLabel minutesLabel;
     private javax.swing.JLabel movieTitleLabel;
     private javax.swing.JTextField movieTitleTextField;
     private javax.swing.JCheckBox mysteryCheckBox;
@@ -902,11 +960,12 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
     private javax.swing.JPanel ratingsPanel;
     private javax.swing.JPanel runtimePanel;
     private javax.swing.JComboBox<String> screenCombo;
-    private javax.swing.JLabel tckPrcLabel;
+    private javax.swing.JSpinner showtimeSpinner;
     private javax.swing.JTextField tckPrcTextField;
     private javax.swing.JLabel theaterLabel;
     private javax.swing.JCheckBox thrillerCheckBox;
     private javax.swing.JPanel ticketPricesPanel;
+    private javax.swing.JSpinner timeSpinner;
     private javax.swing.JButton updateBtn;
     private javax.swing.JLabel uriLabel;
     private javax.swing.JTextField uriTextField;
@@ -1080,22 +1139,6 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
         this.horrorCheckBox = horrorCheckBox;
     }
 
-    public JSpinner getHourSpinner() {
-        return hourSpinner;
-    }
-
-    public void setHourSpinner(JSpinner hourSpinner) {
-        this.hourSpinner = hourSpinner;
-    }
-
-    public JLabel getHoursLabel() {
-        return hoursLabel;
-    }
-
-    public void setHoursLabel(JLabel hoursLabel) {
-        this.hoursLabel = hoursLabel;
-    }
-
     public JLabel getjLabel10() {
         return jLabel10;
     }
@@ -1118,22 +1161,6 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
 
     public void setMainPanel(JPanel mainPanel) {
         this.mainPanel = mainPanel;
-    }
-
-    public JSpinner getMinuteSpinner() {
-        return minuteSpinner;
-    }
-
-    public void setMinuteSpinner(JSpinner minuteSpinner) {
-        this.minuteSpinner = minuteSpinner;
-    }
-
-    public JLabel getMinutesLabel() {
-        return minutesLabel;
-    }
-
-    public void setMinutesLabel(JLabel minutesLabel) {
-        this.minutesLabel = minutesLabel;
     }
 
     public JLabel getMovieTitleLabel() {
@@ -1208,14 +1235,6 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
         this.screenCombo = screenCombo;
     }
 
-    public JLabel getTckPrcLabel() {
-        return tckPrcLabel;
-    }
-
-    public void setTckPrcLabel(JLabel tckPrcLabel) {
-        this.tckPrcLabel = tckPrcLabel;
-    }
-
     public JTextField getTckPrcTextField() {
         return tckPrcTextField;
     }
@@ -1238,6 +1257,46 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
 
     public void setThrillerCheckBox(JCheckBox thrillerCheckBox) {
         this.thrillerCheckBox = thrillerCheckBox;
+    }
+
+    public JDateChooser getjDateChooser1() {
+        return jDateChooser1;
+    }
+
+    public void setjDateChooser1(JDateChooser jDateChooser1) {
+        this.jDateChooser1 = jDateChooser1;
+    }
+
+    public JLabel getjLabel1() {
+        return jLabel1;
+    }
+
+    public void setjLabel1(JLabel jLabel1) {
+        this.jLabel1 = jLabel1;
+    }
+
+    public JLabel getjLabel2() {
+        return jLabel2;
+    }
+
+    public void setjLabel2(JLabel jLabel2) {
+        this.jLabel2 = jLabel2;
+    }
+
+    public JSpinner getShotimeSpinner() {
+        return showtimeSpinner;
+    }
+
+    public void setShotimeSpinner(JSpinner shotimeSpinner) {
+        this.showtimeSpinner = shotimeSpinner;
+    }
+
+    public JSpinner getTimeSpinner() {
+        return timeSpinner;
+    }
+
+    public void setTimeSpinner(JSpinner timeSpinner) {
+        this.timeSpinner = timeSpinner;
     }
 
     public JPanel getTicketPricesPanel() {
