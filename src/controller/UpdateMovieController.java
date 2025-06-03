@@ -7,7 +7,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;  // For converting to java.sql.Date
+import java.sql.Time;  // For handling Time objects
+import java.util.Calendar;  // For date handling
 import java.util.List;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
@@ -64,15 +66,24 @@ public class UpdateMovieController {
         movie.setContentRating(view.getContRatingCombo().getSelectedItem().toString());
         movie.setDescription(view.getDescriptionTextArea().getText());
         movie.setScreen(view.getScreenCombo().getSelectedItem().toString());
-        
-        // Handle null date case
-        Date selectedDate = view.getjDateChooser1().getDate();
+        // Handle null date case and convert java.util.Date to java.sql.Date
+        java.util.Date selectedDate = view.getjDateChooser1().getDate();
         if (selectedDate == null) {
-            JOptionPane.showMessageDialog(view, "Please select a valid date.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;  // Exit if no valid date is selected
+            selectedDate = new java.util.Date(); // Set current date if null
         }
-        movie.setDate(selectedDate);
-        
+        java.sql.Date sqlDate = new java.sql.Date(selectedDate.getTime()); // Convert to java.sql.Date
+        movie.setDate(sqlDate);
+
+        // Handle timeSpinner for java.sql.Time
+        java.util.Date timeUtil = (java.util.Date) view.getTimeSpinner().getValue();  // Get time from spinner
+        java.sql.Time sqlTime = new java.sql.Time(timeUtil.getTime());  // Convert to java.sql.Time
+        movie.setTime(sqlTime);
+
+        // Handle showtimeSpinner for java.sql.Time
+        java.util.Date showtimeUtil = (java.util.Date) view.getShotimeSpinner().getValue();  // Get showtime from spinner
+        java.sql.Time sqlShowtime = new java.sql.Time(showtimeUtil.getTime());  // Convert to java.sql.Time
+        movie.setShowtime(sqlShowtime);
+
         try {
             movie.setTicketPrice(Integer.parseInt(view.getTckPrcTextField().getText()));
         } catch (NumberFormatException e) {
@@ -95,7 +106,6 @@ public class UpdateMovieController {
             JOptionPane.showMessageDialog(view, "Please fill all required fields.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-       
 
         // Update in database
         try {

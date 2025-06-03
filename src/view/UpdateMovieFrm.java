@@ -36,19 +36,21 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import util.DatabaseConnection;
 import java.sql.Time;
+import javax.swing.SpinnerDateModel;
 
 /**
  *
  * @author nadinCodeHat
  */
 public class UpdateMovieFrm extends javax.swing.JFrame {
-    
+
     private UpdateMovieController controller;
     private byte[] poster;
-    
+
     public UpdateMovieFrm() {
         initComponents();
-        controller = new UpdateMovieController(this);
+        controller = new UpdateMovieController(this, null); // If you don't need AdminDashboardController, pass null
+
     }
 
     int id;
@@ -58,8 +60,6 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
         this.id = movieId;
         loadEditData();
     }
-    
-    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -364,7 +364,7 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        mainPanel.add(runtimePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 190, 160, 150));
+        mainPanel.add(runtimePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 200, 160, 150));
 
         descriptionPanel.setBackground(new java.awt.Color(255, 255, 255));
         descriptionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Description", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP));
@@ -383,10 +383,10 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
         );
         descriptionPanelLayout.setVerticalGroup(
             descriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE)
         );
 
-        mainPanel.add(descriptionPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 333, 350, 100));
+        mainPanel.add(descriptionPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 343, 350, 90));
 
         ticketPricesPanel.setBackground(new java.awt.Color(255, 255, 255));
         ticketPricesPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Ticket Price", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP));
@@ -485,6 +485,9 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
         String screen = null;
         String ticketPrice = null;
         String uri = null;
+        Date date = null; // Declare date outside
+        Time time = null; // Declare time outside
+        Time showtime = null; // Declare showtime outside
         PreparedStatement pst = null;
         ResultSet rs = null;
         try {
@@ -495,9 +498,9 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
                 genre = rs.getString("genre");
                 rating = rs.getDouble("rating");
                 contentRating = rs.getString("content_rating");
-                Date date = rs.getDate("date");
-                Time time = rs.getTime("time");
-                Time showtime = rs.getTime("showtime");
+                date = rs.getDate("date"); // Get the date from DB
+                time = rs.getTime("time"); // Get the time from DB
+                showtime = rs.getTime("showtime"); // Get the showtime from DB
                 description = rs.getString("description");
                 screen = rs.getString("screen");
                 ticketPrice = String.valueOf(rs.getInt("ticket_price"));
@@ -513,9 +516,24 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
 
         movieTitleTextField.setText(movietitle);
         ratingSpinner.setValue(rating);
-        jDateChooser1.setDate(date);
-        timeSpinner.setTime(time);
-        showtimeSpinner.setTime(showtime);
+        if (date != null) {
+            jDateChooser1.setDate(date); // Set the date if it’s valid
+        } else {
+            jDateChooser1.setDate(new Date()); // Set the current date as fallback
+        }
+
+        // Set timeSpinner and showtimeSpinner with checks for null values
+        if (time != null) {
+            timeSpinner.setValue(new Date(time.getTime())); // Convert Time to Date and set it
+        } else {
+            timeSpinner.setValue(new Date()); // Set the current date as fallback
+        }
+
+        if (showtime != null) {
+            showtimeSpinner.setValue(new Date(showtime.getTime())); // Convert Time to Date and set it
+        } else {
+            showtimeSpinner.setValue(new Date()); // Set the current date as fallback
+        }
         contRatingCombo.setSelectedItem(contentRating);
         List<String> listGenre = Arrays.asList(genre.split(","));
 
@@ -718,8 +736,6 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
         if (genreBuilder.length() > 0) {
             genre = genreBuilder.substring(0, genreBuilder.length() - 2); // Remove last ", "
         }
-        
-        
 
         if (checkEmptyFields()) {
             String updateMoveQuery = "UPDATE `movies` SET `movie_title`=?, `genre`=?, `rating`=?, `date`=?, `time`=?, `showtime`=?, `content_rating`=?, `description`=?, `screen`=?, `ticket_price`=?, `uri`=?"
@@ -784,24 +800,13 @@ public class UpdateMovieFrm extends javax.swing.JFrame {
     }
 
     private void updateBtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_updateBtnMouseEntered
-        try {
-            Image updateBtnImgHover = ImageIO.read(getClass().getResource("/movie/ticketbooking/system/assets/components/updateBtnHover.png"));
-            updateBtn.setIcon(new ImageIcon(updateBtnImgHover));
-        } catch (IOException ex) {
-            Logger.getLogger(UpdateMovieFrm.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
     }//GEN-LAST:event_updateBtnMouseEntered
 
     private void updateBtnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_updateBtnMouseExited
-        try {
-            Image updateBtnImg = ImageIO.read(getClass().getResource("/movie/ticketbooking/system/assets/components/updateBtn.png"));
-            updateBtn.setIcon(new ImageIcon(updateBtnImg));
-        } catch (IOException ex) {
-            Logger.getLogger(UpdateMovieFrm.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
     }//GEN-LAST:event_updateBtnMouseExited
 
-    byte[] poster = null;
     private void browsePosterBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browsePosterBtnActionPerformed
         JFileChooser browseImageFile = new JFileChooser();
         //Filter image extensions
